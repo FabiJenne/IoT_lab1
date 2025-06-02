@@ -19,7 +19,7 @@ class Ui_Form(object):
         self.pushButton.setGeometry(QtCore.QRect(150, 50, 93, 28))
         self.pushButton.setObjectName("pushButton")
         self.groupBox = QtWidgets.QGroupBox(Form)
-        self.groupBox.setGeometry(QtCore.QRect(80, 220, 371, 211))
+        self.groupBox.setGeometry(QtCore.QRect(20, 240, 211, 131))
         self.groupBox.setObjectName("groupBox")
         self.spinBox = QtWidgets.QSpinBox(self.groupBox)
         self.spinBox.setGeometry(QtCore.QRect(40, 50, 42, 22))
@@ -27,6 +27,9 @@ class Ui_Form(object):
         self.spinBox_2 = QtWidgets.QSpinBox(self.groupBox)
         self.spinBox_2.setGeometry(QtCore.QRect(150, 50, 42, 22))
         self.spinBox_2.setObjectName("spinBox_2")
+        self.MplWidget = QtWidgets.QWidget(Form)
+        self.MplWidget.setGeometry(QtCore.QRect(260, 210, 311, 251))
+        self.MplWidget.setObjectName("MplWidget")
 
         self.retranslateUi(Form)
         QtCore.QMetaObject.connectSlotsByName(Form)
