@@ -9,7 +9,7 @@
 
 
 from PyQt5 import QtCore, QtGui, QtWidgets
-from mplwidget import mplwidget
+from mplwidget import MplWidget
 
 class Ui_Form(object):
     def setupUi(self, Form):
@@ -27,7 +27,7 @@ class Ui_Form(object):
         self.spinBox_2 = QtWidgets.QSpinBox(self.groupBox)
         self.spinBox_2.setGeometry(QtCore.QRect(150, 50, 42, 22))
         self.spinBox_2.setObjectName("spinBox_2")
-        self.MplWidget = mplwidget(Form)
+        self.MplWidget = MplWidget(Form)
         self.MplWidget.setGeometry(QtCore.QRect(260, 210, 311, 251))
         self.MplWidget.setObjectName("MplWidget")
 
