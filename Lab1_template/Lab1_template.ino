@@ -1,9 +1,9 @@
 // -------------------------------------------
 //
 //  Poject: Lab1_task1
-//  Group:
-//  Students:
-//  Date:
+//  Group: 35
+//  Students: Niels van Griethuijsen & Fabiënne Voorhorst
+//  Date: 6/2/2025
 //  ------------------------------------------
 
 
