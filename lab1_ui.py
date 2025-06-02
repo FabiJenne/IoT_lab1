@@ -9,7 +9,7 @@
 
 
 from PyQt5 import QtCore, QtGui, QtWidgets
-
+from mplwidget import mplwidget
 
 class Ui_Form(object):
     def setupUi(self, Form):
@@ -39,4 +39,4 @@ class Ui_Form(object):
         Form.setWindowTitle(_translate("Form", "Form"))
         self.pushButton.setText(_translate("Form", "PushButton"))
         self.groupBox.setTitle(_translate("Form", "GroupBox"))
-from mplwidget import mplwidget
+
