@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file 'lab1.ui'
+# Form implementation generated from reading ui file 'lab1.2.ui'
 #
 # Created by: PyQt5 UI code generator 5.15.10
 #
@@ -15,6 +15,18 @@ class Ui_Form(object):
     def setupUi(self, Form):
         Form.setObjectName("Form")
         Form.resize(595, 474)
+        self.pushButton = QtWidgets.QPushButton(Form)
+        self.pushButton.setGeometry(QtCore.QRect(150, 50, 93, 28))
+        self.pushButton.setObjectName("pushButton")
+        self.groupBox = QtWidgets.QGroupBox(Form)
+        self.groupBox.setGeometry(QtCore.QRect(80, 220, 371, 211))
+        self.groupBox.setObjectName("groupBox")
+        self.spinBox = QtWidgets.QSpinBox(self.groupBox)
+        self.spinBox.setGeometry(QtCore.QRect(40, 50, 42, 22))
+        self.spinBox.setObjectName("spinBox")
+        self.spinBox_2 = QtWidgets.QSpinBox(self.groupBox)
+        self.spinBox_2.setGeometry(QtCore.QRect(150, 50, 42, 22))
+        self.spinBox_2.setObjectName("spinBox_2")
 
         self.retranslateUi(Form)
         QtCore.QMetaObject.connectSlotsByName(Form)
@@ -22,3 +34,5 @@ class Ui_Form(object):
     def retranslateUi(self, Form):
         _translate = QtCore.QCoreApplication.translate
         Form.setWindowTitle(_translate("Form", "Form"))
+        self.pushButton.setText(_translate("Form", "PushButton"))
+        self.groupBox.setTitle(_translate("Form", "GroupBox"))
