@@ -11,28 +11,14 @@
 from PyQt5 import QtCore, QtGui, QtWidgets
 
 
-class Ui_Dialog(object):
-    def setupUi(self, Dialog):
-        Dialog.setObjectName("Dialog")
-        Dialog.resize(718, 620)
-        self.pushButton = QtWidgets.QPushButton(Dialog)
-        self.pushButton.setGeometry(QtCore.QRect(130, 140, 93, 28))
-        self.pushButton.setObjectName("pushButton")
-        self.groupBox = QtWidgets.QGroupBox(Dialog)
-        self.groupBox.setGeometry(QtCore.QRect(100, 230, 381, 271))
-        self.groupBox.setObjectName("groupBox")
-        self.spinBox = QtWidgets.QSpinBox(self.groupBox)
-        self.spinBox.setGeometry(QtCore.QRect(50, 80, 42, 22))
-        self.spinBox.setObjectName("spinBox")
-        self.spinBox_2 = QtWidgets.QSpinBox(self.groupBox)
-        self.spinBox_2.setGeometry(QtCore.QRect(180, 80, 42, 22))
-        self.spinBox_2.setObjectName("spinBox_2")
+class Ui_Form(object):
+    def setupUi(self, Form):
+        Form.setObjectName("Form")
+        Form.resize(595, 474)
 
-        self.retranslateUi(Dialog)
-        QtCore.QMetaObject.connectSlotsByName(Dialog)
+        self.retranslateUi(Form)
+        QtCore.QMetaObject.connectSlotsByName(Form)
 
-    def retranslateUi(self, Dialog):
+    def retranslateUi(self, Form):
         _translate = QtCore.QCoreApplication.translate
-        Dialog.setWindowTitle(_translate("Dialog", "Dialog"))
-        self.pushButton.setText(_translate("Dialog", "PushButton"))
-        self.groupBox.setTitle(_translate("Dialog", "GroupBox"))
+        Form.setWindowTitle(_translate("Form", "Form"))
