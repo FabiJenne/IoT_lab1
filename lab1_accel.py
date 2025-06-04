@@ -1,7 +1,7 @@
 import time
 import serial
 import sys
-
+import csv
 
 from datetime import datetime
 from PyQt5.QtCore import Qt, QTimer, QDateTime
@@ -15,7 +15,7 @@ from matplotlib.backends.backend_qt5agg import NavigationToolbar2QT as Navigatio
 from matplotlib.figure import Figure
 
 ser = serial.Serial(
-    port='COM5',
+    port='COM6',
     baudrate=9600,
     parity=serial.PARITY_ODD,
     stopbits=serial.STOPBITS_TWO,
@@ -67,6 +67,7 @@ class Lab1(QMainWindow):
         self.ui.setupUi(self)
         self.mybuttonfunction = self.on_off
         self.ui.pushButton.clicked.connect(self.mybuttonfunction)
+        self.ui.pushButton_2.clicked.connect(self.to_file)
         self.setWindowTitle("arduino_sensors")
         self.status = 0
         self.timer = QTimer(self)
@@ -107,6 +108,20 @@ class Lab1(QMainWindow):
             self.status = 1
             self.ui.pushButton.setText("Form", "Start")
 
+    def to_file(self):
+        all_data = zip(self.data.timestamps, self.data.x, self.data.y, self.data.z)
+        with open("data.csv", 'w', newline='') as f:
+            writer = csv.writer(f)
+            writer.writerow(['Timestamp', 'X', 'Y', 'Z'])
+            for row in all_data:
+                writer.writerow(row)
+        # with open("data.csv", 'w', newline='') as f:
+        #     writer = csv.writer(f)
+        #     writer.writecol(self.data.timestamps)
+        #     writer.writerow(self.data.x)
+        #     writer.writerow(self.data.y)
+        #     writer.writerow(self.data.z)
+           
 
 if __name__ == "__main__":
     app = QApplication([])
