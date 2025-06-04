@@ -23,7 +23,7 @@
     </rect>
    </property>
    <property name="text">
-    <string>PushButton</string>
+    <string>plot accelerator</string>
    </property>
   </widget>
   <widget class="QGroupBox" name="groupBox">
@@ -79,7 +79,7 @@
     </rect>
    </property>
    <property name="text">
-    <string>PushButton</string>
+    <string>upload to file</string>
    </property>
   </widget>
  </widget>
