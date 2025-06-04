@@ -41,6 +41,6 @@ class Ui_Form(object):
     def retranslateUi(self, Form):
         _translate = QtCore.QCoreApplication.translate
         Form.setWindowTitle(_translate("Form", "Form"))
-        self.pushButton.setText(_translate("Form", "plot accelerator"))
+        self.pushButton.setText(_translate("Form", "Start"))
         self.groupBox.setTitle(_translate("Form", "GroupBox"))
-        self.pushButton_2.setText(_translate("Form", "upload to file"))
+        self.pushButton_2.setText(_translate("Form", "File"))

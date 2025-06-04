@@ -100,10 +100,12 @@ class Lab1(QMainWindow):
             time.sleep(1)
             self.status = 0
             self.last_pause_index = len(self.data.timestamps)
+            self.ui.pushButton.setText("Form", "Stop")
         else:
             self.timer.start(100)  # every 100msec execute self.plot.data
             self.plot_data()
             self.status = 1
+            self.ui.pushButton.setText("Form", "Start")
 
 
 if __name__ == "__main__":

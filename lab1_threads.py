@@ -25,7 +25,6 @@ ser = serial.Serial(
 
 class SensorData(QThread):
     data_updated = pyqtSignal()
-
     def __init__(self):
         super().__init__(parent=None)
         self._x = []
@@ -75,13 +74,14 @@ class Lab1(QMainWindow):
         self.ui.pushButton.clicked.connect(self.mybuttonfunction)
         self.setWindowTitle("arduino_sensors")
         self.status = 0
-        self.timer = QTimer(self)
-        self.timer.timeout.connect(self.plot_data)
         self.ui.MplWidget.canvas.axes.set_ylim(0, 2)  # set lim y-as at 0-10
         self.data = SensorData()
+        self.data.data_updated.connect(self.plot_data)
+        self.data.start()
 
     def plot_data(self):
-        self.data.run()
+        if not self.status:
+            return
         start = self.last_pause_index
         x = self.data.x[start:]
         y = self.data.y[start:]
@@ -101,15 +101,15 @@ class Lab1(QMainWindow):
 
     def on_off(self):
         if self.status:
-            print("On")
-            self.timer.stop()
-            time.sleep(1)
             self.status = 0
             self.last_pause_index = len(self.data.timestamps)
+            self.ui.pushButton.setText("Start")
+            self.ui.pushButton.setStyleSheet("")
         else:
-            self.timer.start(100)  # every 100msec execute self.plot.data
             self.plot_data()
             self.status = 1
+            self.ui.pushButton.setText("Stop")
+            self.ui.pushButton.setStyleSheet("background-color : red")
 
 
 if __name__ == "__main__":
