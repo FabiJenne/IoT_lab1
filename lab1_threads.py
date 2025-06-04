@@ -1,10 +1,10 @@
 import time
 import serial
 import sys
-import csv
+
 
 from datetime import datetime
-from PyQt5.QtCore import Qt, QTimer, QDateTime
+from PyQt5.QtCore import Qt, QTimer, QDateTime, QThread, pyqtSignal
 from PyQt5.QtWidgets import QMainWindow, QApplication
 from lab1_ui import Ui_Form
 
@@ -23,13 +23,17 @@ ser = serial.Serial(
 )
 
 
-class SensorData:
+class SensorData(QThread):
+    data_updated = pyqtSignal()
+
     def __init__(self):
+        super().__init__(parent=None)
         self._x = []
         self._y = []
         self._z = []
         self._timestamps = []
         self._start_time = datetime.now()
+        self._running = False
 
     @property
     def x(self):
@@ -47,27 +51,28 @@ class SensorData:
     def timestamps(self):
         return self._timestamps
 
-    def update(self):
-        line = ser.readline().decode().strip()
-        if line:
-            values = line.split(",")
-            self._timestamps.append((datetime.now() -
-                                     self._start_time).total_seconds())
-            self._x.append(float(values[0]))
-            self._y.append(float(values[1]))
-            self._z.append(float(values[2]))
+    def run(self):
+        self._running = True
+        while self._running:
+            line = ser.readline().decode().strip()
+            if line:
+                values = line.split(",")
+                self._timestamps.append((datetime.now() -
+                                        self._start_time).total_seconds())
+                self._x.append(float(values[0]))
+                self._y.append(float(values[1]))
+                self._z.append(float(values[2]))
+                self.data_updated.emit()
 
 
 class Lab1(QMainWindow):
     def __init__(self, *args):
-        print("ik start")
         QMainWindow.__init__(self)
         self.last_pause_index = 0
         self.ui = Ui_Form()
         self.ui.setupUi(self)
         self.mybuttonfunction = self.on_off
         self.ui.pushButton.clicked.connect(self.mybuttonfunction)
-        self.ui.pushButton_2.clicked.connect(self.to_file)
         self.setWindowTitle("arduino_sensors")
         self.status = 0
         self.timer = QTimer(self)
@@ -76,7 +81,7 @@ class Lab1(QMainWindow):
         self.data = SensorData()
 
     def plot_data(self):
-        self.data.update()
+        self.data.run()
         start = self.last_pause_index
         x = self.data.x[start:]
         y = self.data.y[start:]
@@ -106,14 +111,6 @@ class Lab1(QMainWindow):
             self.plot_data()
             self.status = 1
 
-    def to_file(self):
-        with open("data.csv", 'w', newline='') as f:
-            writer = csv.writer(f)
-            writer.writerow("timestamps", self.data.timestamps)
-            writer.writerow("x_data", self.data.x)
-            writer.writerow("y_data", self.data.y)
-            writer.writerow("z_data", self.data.z)
-           
 
 if __name__ == "__main__":
     app = QApplication([])

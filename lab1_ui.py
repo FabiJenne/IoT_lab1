@@ -9,6 +9,7 @@
 
 
 from PyQt5 import QtCore, QtGui, QtWidgets
+from mplwidget import MplWidget
 
 
 class Ui_Form(object):
@@ -27,7 +28,7 @@ class Ui_Form(object):
         self.spinBox_2 = QtWidgets.QSpinBox(self.groupBox)
         self.spinBox_2.setGeometry(QtCore.QRect(150, 50, 42, 22))
         self.spinBox_2.setObjectName("spinBox_2")
-        self.MplWidget = mplwidget(Form)
+        self.MplWidget = MplWidget(Form)
         self.MplWidget.setGeometry(QtCore.QRect(40, 40, 451, 331))
         self.MplWidget.setObjectName("MplWidget")
         self.pushButton_2 = QtWidgets.QPushButton(Form)
@@ -43,4 +44,3 @@ class Ui_Form(object):
         self.pushButton.setText(_translate("Form", "plot accelerator"))
         self.groupBox.setTitle(_translate("Form", "GroupBox"))
         self.pushButton_2.setText(_translate("Form", "upload to file"))
-from mplwidget import mplwidget
