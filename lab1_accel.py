@@ -1,7 +1,7 @@
 import time
 import serial
 import sys
-
+import csv
 
 from datetime import datetime
 from PyQt5.QtCore import Qt, QTimer, QDateTime
@@ -66,6 +66,7 @@ class Lab1(QMainWindow):
         self.ui.setupUi(self)
         self.mybuttonfunction = self.on_off
         self.ui.pushButton.clicked.connect(self.mybuttonfunction)
+        self.ui.pushButton_2.clicked.connect(self.to_file)
         self.setWindowTitle("arduino_sensors")
         self.status = 0
         self.timer = QTimer(self)
@@ -97,6 +98,14 @@ class Lab1(QMainWindow):
             self.plot_data()
             self.status = 1
 
+    def to_file(self):
+        with open("data.csv", 'w', newline='') as f:
+            writer = csv.writer(f)
+            writer.writerow("timestamps", self.data.timestamps)
+            writer.writerow("x_data", self.data.x)
+            writer.writerow("y_data", self.data.y)
+            writer.writerow("z_data", self.data.z)
+           
 
 if __name__ == "__main__":
     app = QApplication([])
