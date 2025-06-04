@@ -15,7 +15,7 @@ from matplotlib.backends.backend_qt5agg import NavigationToolbar2QT as Navigatio
 from matplotlib.figure import Figure
 
 ser = serial.Serial(
-    port='COM6',
+    port='COM5',
     baudrate=9600,
     parity=serial.PARITY_ODD,
     stopbits=serial.STOPBITS_TWO,
@@ -25,16 +25,11 @@ ser = serial.Serial(
 
 class SensorData:
     def __init__(self):
-        self._x = 0.0
-        self._y = 0.0
-        self._z = 0.0
-        self.x = []
-        self.y = []
-        self.z = []
-        self.timestamps = []
-        self.timestamps_xas = []
-        self.start_time = datetime.now()
-        self.data = SensorData(self.start_time)
+        self._x = []
+        self._y = []
+        self._z = []
+        self._timestamps = []
+        self._start_time = datetime.now()
 
     @property
     def x(self):
@@ -48,34 +43,25 @@ class SensorData:
     def z(self):
         return self._z
 
+    @property
+    def timestamps(self):
+        return self._timestamps
+
     def update(self):
-        line = self.serial.readline().decode().strip()
-        values = line.split(",")
-        self._x = float(values[0])
-        self._y = float(values[1])
-        self._z = float(values[2])
-        self.time = 
-        # self._x, self._y, self._z = line.split(",")
-        self.data.update()
-        self.x.append(self.data.x)
-        self.y.append(self.data.y)
-        self.z.append(self.data.z)
+        print("Print")
+        line = ser.readline().decode().strip()
+        if line:
+            values = line.split(",")
+            self._timestamps.append((datetime.now() -
+                                     self._start_time).total_seconds())
+            self._x.append(float(values[0]))
+            self._y.append(float(values[1]))
+            self._z.append(float(values[2]))
 
-        # time = QDateTime.currentDateTime().toMSecsSinceEpoch()/1000
-        # self.timestamps.append(time)
-        self.new_time = datetime.now() - self.start_time
-        print(f"verschil time var: {self.new_time.total_seconds()}")
-
-        if len(self.timestamps) > 1:
-            self.timestamps_xas.append(self.timestamps[-1] - self.timestamps[0])
-        else:
-            self.timestamps_xas.append(0)
-        
-        print(f"timestamp: {self.timestamps[-1]}")
-        print(f"x: {self.data.x}, y: {self.data.y}, z: {self.data.z}")
 
 class Lab1(QMainWindow):
     def __init__(self, *args):
+        print("ik start")
         QMainWindow.__init__(self)
         self.ui = Ui_Form()
         self.ui.setupUi(self)
@@ -86,35 +72,36 @@ class Lab1(QMainWindow):
         self.timer = QTimer(self)
         self.timer.timeout.connect(self.plot_data)
         self.ui.MplWidget.canvas.axes.set_ylim(0, 2)  # set lim y-as at 0-10
- 
-    def plot_data(self):
-        # self.x.append(self.x[-1] + 1)
-        # self.y.append(random.randrange(10))
+        self.data = SensorData()
 
-        if len(self.x) > 20:
-            self.x = self.x[-20:]
-            self.y = self.y[-20:]
-            self.z = self.z[-20:]
-            self.timestamps_xas = self.timestamps_xas[-20:]
-        
+    def plot_data(self):
+        self.data.update()
+        x = self.data.x
+        y = self.data.y
+        z = self.data.z
+        timestamps = self.data.timestamps
+
         self.ui.MplWidget.canvas.axes.clear()
-        # self.ui.MplWidget.canvas.axes.plot(self.x, self.y, 'r', linewidth=0.5)
-        self.ui.MplWidget.canvas.axes.plot(self.timestamps_xas, self.x, 'r', label='x', linewidth=0.5)
-        self.ui.MplWidget.canvas.axes.plot(self.timestamps_xas, self.y, 'g', label='y', linewidth=0.5)
-        self.ui.MplWidget.canvas.axes.plot(self.timestamps_xas, self.z, 'b', label='z', linewidth=0.5)
+        self.ui.MplWidget.canvas.axes.plot(timestamps, x, 'r', label='x', linewidth=0.5)
+        self.ui.MplWidget.canvas.axes.plot(timestamps, y, 'g', label='y', linewidth=0.5)
+        self.ui.MplWidget.canvas.axes.plot(timestamps, z, 'b', label='z', linewidth=0.5)
         self.ui.MplWidget.canvas.draw()
 
     def on_off(self):
         if self.status:
-            ser.write("off".encode())
+            print("On")
+            # ser.write("off".encode())
             self.timer.stop()
             # print(ser.readline().decode())
             time.sleep(1)
             self.status = 0
         else:
-            ser.write("on".encode())
+            print("Else")
+            # ser.write("on".encode())
             self.timer.start(100)  # every 100msec execute self.plot.data
+            print("started")
             self.plot_data()
+            print("plot")
             # print(ser.readline().decode())
             # time.sleep(1)
             self.status = 1
