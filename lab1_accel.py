@@ -48,7 +48,6 @@ class SensorData:
         return self._timestamps
 
     def update(self):
-        print("Print")
         line = ser.readline().decode().strip()
         if line:
             values = line.split(",")
@@ -76,10 +75,10 @@ class Lab1(QMainWindow):
 
     def plot_data(self):
         self.data.update()
-        x = self.data.x
-        y = self.data.y
-        z = self.data.z
-        timestamps = self.data.timestamps
+        x = self.data.x[-20:]
+        y = self.data.y[-20:]
+        z = self.data.z[-20:]
+        timestamps = self.data.timestamps[-20:]
 
         self.ui.MplWidget.canvas.axes.clear()
         self.ui.MplWidget.canvas.axes.plot(timestamps, x, 'r', label='x', linewidth=0.5)
@@ -90,17 +89,12 @@ class Lab1(QMainWindow):
     def on_off(self):
         if self.status:
             print("On")
-            # ser.write("off".encode())
             self.timer.stop()
-            # print(ser.readline().decode())
             time.sleep(1)
             self.status = 0
         else:
-            # ser.write("on".encode())
             self.timer.start(100)  # every 100msec execute self.plot.data
             self.plot_data()
-            # print(ser.readline().decode())
-            # time.sleep(1)
             self.status = 1
 
 

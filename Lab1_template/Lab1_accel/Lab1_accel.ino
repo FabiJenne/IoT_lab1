@@ -52,5 +52,5 @@ void loop() {
     String data = String(x) + "," + String(y) + "," + String(z);
     Serial.println(data);
   }
-  delay(200);
+  delay(100);
 }
