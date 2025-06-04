@@ -15,7 +15,7 @@ from matplotlib.backends.backend_qt5agg import NavigationToolbar2QT as Navigatio
 from matplotlib.figure import Figure
 
 ser = serial.Serial(
-    port='COM5',
+    port='COM6',
     baudrate=9600,
     parity=serial.PARITY_ODD,
     stopbits=serial.STOPBITS_TWO,
@@ -107,12 +107,18 @@ class Lab1(QMainWindow):
             self.status = 1
 
     def to_file(self):
+        all_data = zip(self.data.timestamps, self.data.x, self.data.y, self.data.z)
         with open("data.csv", 'w', newline='') as f:
             writer = csv.writer(f)
-            writer.writerow("timestamps", self.data.timestamps)
-            writer.writerow("x_data", self.data.x)
-            writer.writerow("y_data", self.data.y)
-            writer.writerow("z_data", self.data.z)
+            writer.writerow(['Timestamp', 'X', 'Y', 'Z'])
+            for row in all_data:
+                writer.writerow(row)
+        # with open("data.csv", 'w', newline='') as f:
+        #     writer = csv.writer(f)
+        #     writer.writecol(self.data.timestamps)
+        #     writer.writerow(self.data.x)
+        #     writer.writerow(self.data.y)
+        #     writer.writerow(self.data.z)
            
 
 if __name__ == "__main__":
