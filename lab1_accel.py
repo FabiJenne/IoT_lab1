@@ -90,6 +90,8 @@ class Lab1(QMainWindow):
         if self.status:
             print("On")
             self.timer.stop()
+            self.ui.MplWidget.canvas.axes.clear()
+            self.ui.MplWidget.canvas.draw()
             time.sleep(1)
             self.status = 0
         else:
