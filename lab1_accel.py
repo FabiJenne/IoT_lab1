@@ -96,12 +96,9 @@ class Lab1(QMainWindow):
             time.sleep(1)
             self.status = 0
         else:
-            print("Else")
             # ser.write("on".encode())
             self.timer.start(100)  # every 100msec execute self.plot.data
-            print("started")
             self.plot_data()
-            print("plot")
             # print(ser.readline().decode())
             # time.sleep(1)
             self.status = 1
