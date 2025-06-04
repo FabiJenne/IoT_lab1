@@ -1,9 +1,9 @@
 import time
 import serial
 import sys
-import random
-import csv
 
+
+from datetime import datetime
 from PyQt5.QtCore import Qt, QTimer, QDateTime
 from PyQt5.QtWidgets import QMainWindow, QApplication
 from lab1_ui import Ui_Form
@@ -15,7 +15,7 @@ from matplotlib.backends.backend_qt5agg import NavigationToolbar2QT as Navigatio
 from matplotlib.figure import Figure
 
 ser = serial.Serial(
-    port='COM8',
+    port='COM6',
     baudrate=9600,
     parity=serial.PARITY_ODD,
     stopbits=serial.STOPBITS_TWO,
@@ -24,11 +24,17 @@ ser = serial.Serial(
 
 
 class SensorData:
-    def __init__(self, serial_connection):
+    def __init__(self):
         self._x = 0.0
         self._y = 0.0
         self._z = 0.0
-        self.serial = serial_connection
+        self.x = []
+        self.y = []
+        self.z = []
+        self.timestamps = []
+        self.timestamps_xas = []
+        self.start_time = datetime.now()
+        self.data = SensorData(self.start_time)
 
     @property
     def x(self):
@@ -48,7 +54,25 @@ class SensorData:
         self._x = float(values[0])
         self._y = float(values[1])
         self._z = float(values[2])
+        self.time = 
         # self._x, self._y, self._z = line.split(",")
+        self.data.update()
+        self.x.append(self.data.x)
+        self.y.append(self.data.y)
+        self.z.append(self.data.z)
+
+        # time = QDateTime.currentDateTime().toMSecsSinceEpoch()/1000
+        # self.timestamps.append(time)
+        self.new_time = datetime.now() - self.start_time
+        print(f"verschil time var: {self.new_time.total_seconds()}")
+
+        if len(self.timestamps) > 1:
+            self.timestamps_xas.append(self.timestamps[-1] - self.timestamps[0])
+        else:
+            self.timestamps_xas.append(0)
+        
+        print(f"timestamp: {self.timestamps[-1]}")
+        print(f"x: {self.data.x}, y: {self.data.y}, z: {self.data.z}")
 
 class Lab1(QMainWindow):
     def __init__(self, *args):
@@ -59,35 +83,13 @@ class Lab1(QMainWindow):
         self.ui.pushButton.clicked.connect(self.mybuttonfunction)
         self.setWindowTitle("arduino_sensors")
         self.status = 0
-        self.timestamps = []
-        self.timestamps_xas = []
-        self.x = []
-        self.y = []
-        self.z = []
         self.timer = QTimer(self)
         self.timer.timeout.connect(self.plot_data)
         self.ui.MplWidget.canvas.axes.set_ylim(0, 2)  # set lim y-as at 0-10
-
-        self.data = SensorData(ser)
-
+ 
     def plot_data(self):
         # self.x.append(self.x[-1] + 1)
         # self.y.append(random.randrange(10))
-        self.data.update()
-        self.x.append(self.data.x)
-        self.y.append(self.data.y)
-        self.z.append(self.data.z)
-
-        time = QDateTime.currentDateTime().toMSecsSinceEpoch()/1000
-        self.timestamps.append(time)
-
-        if len(self.timestamps) > 1:
-            self.timestamps_xas.append(self.timestamps[-1] - self.timestamps[0])
-        else:
-            self.timestamps_xas.append(0)
-        
-        print(f"timestamp: {self.timestamps[-1]}") 
-        print(f"x: {self.data.x}, y: {self.data.y}, z: {self.data.z}")
 
         if len(self.x) > 20:
             self.x = self.x[-20:]
