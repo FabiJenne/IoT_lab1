@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file 'lab1.2.ui'
+# Form implementation generated from reading ui file 'lab1.ui'
 #
 # Created by: PyQt5 UI code generator 5.15.10
 #
@@ -9,17 +9,17 @@
 
 
 from PyQt5 import QtCore, QtGui, QtWidgets
-from mplwidget import MplWidget
+
 
 class Ui_Form(object):
     def setupUi(self, Form):
         Form.setObjectName("Form")
-        Form.resize(595, 474)
+        Form.resize(772, 563)
         self.pushButton = QtWidgets.QPushButton(Form)
-        self.pushButton.setGeometry(QtCore.QRect(150, 50, 93, 28))
+        self.pushButton.setGeometry(QtCore.QRect(100, 410, 93, 28))
         self.pushButton.setObjectName("pushButton")
         self.groupBox = QtWidgets.QGroupBox(Form)
-        self.groupBox.setGeometry(QtCore.QRect(20, 240, 211, 131))
+        self.groupBox.setGeometry(QtCore.QRect(520, 110, 211, 131))
         self.groupBox.setObjectName("groupBox")
         self.spinBox = QtWidgets.QSpinBox(self.groupBox)
         self.spinBox.setGeometry(QtCore.QRect(40, 50, 42, 22))
@@ -27,9 +27,12 @@ class Ui_Form(object):
         self.spinBox_2 = QtWidgets.QSpinBox(self.groupBox)
         self.spinBox_2.setGeometry(QtCore.QRect(150, 50, 42, 22))
         self.spinBox_2.setObjectName("spinBox_2")
-        self.MplWidget = MplWidget(Form)
-        self.MplWidget.setGeometry(QtCore.QRect(260, 210, 311, 251))
+        self.MplWidget = mplwidget(Form)
+        self.MplWidget.setGeometry(QtCore.QRect(40, 40, 451, 331))
         self.MplWidget.setObjectName("MplWidget")
+        self.pushButton_2 = QtWidgets.QPushButton(Form)
+        self.pushButton_2.setGeometry(QtCore.QRect(540, 250, 93, 28))
+        self.pushButton_2.setObjectName("pushButton_2")
 
         self.retranslateUi(Form)
         QtCore.QMetaObject.connectSlotsByName(Form)
@@ -39,4 +42,5 @@ class Ui_Form(object):
         Form.setWindowTitle(_translate("Form", "Form"))
         self.pushButton.setText(_translate("Form", "PushButton"))
         self.groupBox.setTitle(_translate("Form", "GroupBox"))
-
+        self.pushButton_2.setText(_translate("Form", "PushButton"))
+from mplwidget import mplwidget
