@@ -2,7 +2,7 @@ import time
 import serial
 import sys
 
-from PyQt5.QtCore import Qt
+from PyQt5.QtCore import Qt, QTimer, QDateTime
 from PyQt5.QtWidgets import QMainWindow, QApplication
 from lab1_ui import Ui_Form
 
@@ -11,6 +11,14 @@ matplotlib.use("Qt5Agg")
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
 from matplotlib.backends.backend_qt5agg import NavigationToolbar2QT as NavigationToolbar
 from matplotlib.figure import Figure
+
+ser = serial.Serial(
+    port='COM8',
+    baudrate=9600,
+    parity=serial.PARITY_ODD,
+    stopbits=serial.STOPBITS_TWO,
+    bytesize=serial.SEVENBITS
+)
 
 
 class Lab1(QMainWindow):
@@ -22,32 +30,22 @@ class Lab1(QMainWindow):
         self.ui.pushButton.clicked.connect(self.mybuttonfunction)
         self.setWindowTitle("arduino_sensors")
         self.status = 0
-        self.x = [1, 3, 4, 6, 9, 3]
-        self.y = [.3, .7, .6, .9, .2, .6]
+        self.timer = QTimer(self)
 
     def on_off(self):
-        self.ui.MplWidget.canvas.axes.clear()
-        self.ui.MplWidget.canvas.axes.plot(self.x, self.y, 'r', linewidth=0.5)
-        self.ui.MplWidget.canvas.draw()
         if self.status:
             ser.write("off".encode())
+            self.timer.stop()
             print(ser.readline().decode())
-            time.sleep(.1)
+            time.sleep(1)
             self.status = 0
         else:
             ser.write("on".encode())
+            self.timer.start(100)  # every 100msec execute self.plot.data
             print(ser.readline().decode())
             time.sleep(1)
             self.status = 1
 
-
-ser = serial.Serial(
-    port='COM5',
-    baudrate=9600,
-    parity=serial.PARITY_ODD,
-    stopbits=serial.STOPBITS_TWO,
-    bytesize=serial.SEVENBITS
-)
 
 if __name__ == "__main__":
     app = QApplication([])
