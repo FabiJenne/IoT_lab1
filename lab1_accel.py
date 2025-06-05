@@ -1,5 +1,3 @@
-import time
-import random
 import serial
 import sys
 import csv
@@ -18,7 +16,6 @@ from matplotlib.figure import Figure
 
 ser = serial.Serial(
     port='COM8',
-    port='COM8',
     baudrate=9600,
     parity=serial.PARITY_ODD,
     stopbits=serial.STOPBITS_TWO,
@@ -35,6 +32,14 @@ class SensorData(QThread):
         self._x = []
         self._y = []
         self._z = []
+        self.mean_x = 0
+        self.mean_y = 0
+        self.mean_z = 0
+        self.all_mean = 0
+        self.std_x = 0
+        self.std_y = 0
+        self.std_z = 0
+        self.all_std = 0
         self._timestamps = []
         self._start_time = datetime.now
 
@@ -75,31 +80,23 @@ class SensorData(QThread):
             self._x.append(float(values[0]))
             self._y.append(float(values[1]))
             self._z.append(float(values[2]))
+            self.calc_mean()
+            self.calc_std()
             self.data_updated.emit()
 
     def calc_mean(self):
-        self.mean_x = sum(self._x) / len(self._x)
-        self.mean_y = sum(self._y) / len(self._y)
-        self.mean_z = sum(self._z) / len(self._z)
-        self.all_mean = {self.mean_x, self.mean_y, self.mean_z}
-    
-    def calc_std(self):
-        self.std_x = stat.stdev(self._x)
-        self.std_y = stat.stdev(self._y)
-        self.std_z = stat.stdev(self._z)
-        self.all_std = {self.std_x, self.std_y, self.std_z}
+        if self.x and self.y and self.z:
+            self.mean_x = sum(self.x) / len(self.x)
+            self.mean_y = sum(self.y) / len(self.y)
+            self.mean_z = sum(self.z) / len(self.z)
+            self.all_mean = {self.mean_x, self.mean_y, self.mean_z}
 
-    def calc_mean(self):
-        self.mean_x = sum(self._x) / len(self._x)
-        self.mean_y = sum(self._y) / len(self._y)
-        self.mean_z = sum(self._z) / len(self._z)
-        self.all_mean = {self.mean_x, self.mean_y, self.mean_z}
-    
     def calc_std(self):
-        self.std_x = stat.stdev(self._x)
-        self.std_y = stat.stdev(self._y)
-        self.std_z = stat.stdev(self._z)
-        self.all_std = {self.std_x, self.std_y, self.std_z}
+        if len(self.x) and len(self.y) and len(self.z) > 2:
+            self.std_x = stat.stdev(self._x)
+            self.std_y = stat.stdev(self._y)
+            self.std_z = stat.stdev(self._z)
+            self.all_std = {self.std_x, self.std_y, self.std_z}
 
 
 class Lab1(QMainWindow):
@@ -122,8 +119,6 @@ class Lab1(QMainWindow):
     def timer_func(self):
         self.data.start()
 
-
-
     def plot_data(self):
         if not self.status:
             return
@@ -141,6 +136,9 @@ class Lab1(QMainWindow):
         y = y[-20:]
         z = z[-20:]
         timestamps = timestamps[-20:]
+
+        self.ui.label.setText(f"mean: {self.data.all_mean}")
+        self.ui.label_2.setText(f"std: {self.data.all_std}")
 
         self.ui.MplWidget.canvas.axes.clear()
         self.ui.MplWidget.canvas.axes.plot(timestamps, x, 'r', label='x', linewidth=0.5)
@@ -161,11 +159,6 @@ class Lab1(QMainWindow):
             self.timer.start(self.ui.spinBox_2.value())
             self.plot_data()
             self.status = 1
-            self.data.calc_mean()
-            self.data.calc_std()
-            self.ui.label.setText(f"mean: x={self.data.mean_x:.2f}, y={self.data.mean_y:.2f}, z={self.data.mean_z:.2f}")
-            self.ui.label_2.setText(f"std: x={self.data.std_x:.2f}, y={self.data.std_y:.2f}, z={self.data.std_z:.2f}")
-            self.ui.pushButton.setText("Form", "Start")
             self.ui.pushButton.setText("Stop")
             self.ui.pushButton.setStyleSheet("background-color : red;" +
                                              "color : white; border: none;" +
