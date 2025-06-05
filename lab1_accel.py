@@ -35,11 +35,9 @@ class SensorData(QThread):
         self.mean_x = 0
         self.mean_y = 0
         self.mean_z = 0
-        self.all_mean = 0
         self.std_x = 0
         self.std_y = 0
         self.std_z = 0
-        self.all_std = 0
         self._timestamps = []
         self._start_time = datetime.now
 
@@ -86,17 +84,15 @@ class SensorData(QThread):
 
     def calc_mean(self):
         if self.x and self.y and self.z:
-            self.mean_x = sum(self.x) / len(self.x)
-            self.mean_y = sum(self.y) / len(self.y)
-            self.mean_z = sum(self.z) / len(self.z)
-            self.all_mean = {self.mean_x, self.mean_y, self.mean_z}
+            self.mean_x = round(sum(self.x) / len(self.x), 3)
+            self.mean_y = round(sum(self.y) / len(self.y), 3)
+            self.mean_z = round(sum(self.z) / len(self.z), 3)
 
     def calc_std(self):
         if len(self.x) and len(self.y) and len(self.z) > 2:
-            self.std_x = stat.stdev(self._x)
-            self.std_y = stat.stdev(self._y)
-            self.std_z = stat.stdev(self._z)
-            self.all_std = {self.std_x, self.std_y, self.std_z}
+            self.std_x = round(stat.stdev(self._x), 3)
+            self.std_y = round(stat.stdev(self._y), 3)
+            self.std_z = round(stat.stdev(self._z), 3)
 
 
 class Lab1(QMainWindow):
