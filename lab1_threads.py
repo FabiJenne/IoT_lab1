@@ -25,6 +25,7 @@ ser = serial.Serial(
 
 class SensorData(QThread):
     data_updated = pyqtSignal()
+
     def __init__(self):
         super().__init__(parent=None)
         self._x = []

@@ -9,6 +9,7 @@
 
 
 from PyQt5 import QtCore, QtGui, QtWidgets
+from mplwidget import MplWidget
 
 
 class Ui_Form(object):
@@ -22,11 +23,13 @@ class Ui_Form(object):
         self.groupBox.setGeometry(QtCore.QRect(510, 70, 211, 131))
         self.groupBox.setObjectName("groupBox")
         self.spinBox = QtWidgets.QSpinBox(self.groupBox)
-        self.spinBox.setGeometry(QtCore.QRect(40, 50, 42, 22))
+        self.spinBox.setGeometry(QtCore.QRect(40, 50, 80, 22))
         self.spinBox.setObjectName("spinBox")
         self.spinBox_2 = QtWidgets.QSpinBox(self.groupBox)
-        self.spinBox_2.setGeometry(QtCore.QRect(150, 50, 42, 22))
+        self.spinBox_2.setGeometry(QtCore.QRect(150, 50, 80, 22))
         self.spinBox_2.setObjectName("spinBox_2")
+        self.spinBox_2.setMaximum(1000)
+        self.spinBox_2.setMinimum(10)
         self.MplWidget = mplwidget(Form)
         self.MplWidget.setGeometry(QtCore.QRect(40, 40, 451, 331))
         self.MplWidget.setObjectName("MplWidget")
@@ -51,4 +54,3 @@ class Ui_Form(object):
         self.pushButton_2.setText(_translate("Form", "File"))
         self.label.setText(_translate("Form", "TextLabel"))
         self.label_2.setText(_translate("Form", "TextLabel"))
-from mplwidget import mplwidget
