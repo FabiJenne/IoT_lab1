@@ -2,6 +2,7 @@ import time
 import serial
 import sys
 import csv
+import statistics as stat
 
 from datetime import datetime
 from PyQt5.QtCore import Qt, QTimer, QDateTime
@@ -15,7 +16,7 @@ from matplotlib.backends.backend_qt5agg import NavigationToolbar2QT as Navigatio
 from matplotlib.figure import Figure
 
 ser = serial.Serial(
-    port='COM6',
+    port='COM8',
     baudrate=9600,
     parity=serial.PARITY_ODD,
     stopbits=serial.STOPBITS_TWO,
@@ -57,6 +58,18 @@ class SensorData:
             self._y.append(float(values[1]))
             self._z.append(float(values[2]))
 
+    def calc_mean(self):
+        self.mean_x = sum(self._x) / len(self._x)
+        self.mean_y = sum(self._y) / len(self._y)
+        self.mean_z = sum(self._z) / len(self._z)
+        self.all_mean = {self.mean_x, self.mean_y, self.mean_z}
+    
+    def calc_std(self):
+        self.std_x = stat.stdev(self._x)
+        self.std_y = stat.stdev(self._y)
+        self.std_z = stat.stdev(self._z)
+        self.all_std = {self.std_x, self.std_y, self.std_z}
+
 
 class Lab1(QMainWindow):
     def __init__(self, *args):
@@ -74,6 +87,7 @@ class Lab1(QMainWindow):
         self.timer.timeout.connect(self.plot_data)
         self.ui.MplWidget.canvas.axes.set_ylim(0, 2)  # set lim y-as at 0-10
         self.data = SensorData()
+
 
     def plot_data(self):
         self.data.update()
@@ -106,6 +120,10 @@ class Lab1(QMainWindow):
             self.timer.start(100)  # every 100msec execute self.plot.data
             self.plot_data()
             self.status = 1
+            self.data.calc_mean()
+            self.data.calc_std()
+            self.ui.label.setText(f"mean: x={self.data.mean_x:.2f}, y={self.data.mean_y:.2f}, z={self.data.mean_z:.2f}")
+            self.ui.label_2.setText(f"std: x={self.data.std_x:.2f}, y={self.data.std_y:.2f}, z={self.data.std_z:.2f}")
             self.ui.pushButton.setText("Form", "Start")
 
     def to_file(self):

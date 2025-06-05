@@ -9,7 +9,6 @@
 
 
 from PyQt5 import QtCore, QtGui, QtWidgets
-from mplwidget import MplWidget
 
 
 class Ui_Form(object):
@@ -20,7 +19,7 @@ class Ui_Form(object):
         self.pushButton.setGeometry(QtCore.QRect(100, 410, 93, 28))
         self.pushButton.setObjectName("pushButton")
         self.groupBox = QtWidgets.QGroupBox(Form)
-        self.groupBox.setGeometry(QtCore.QRect(520, 110, 211, 131))
+        self.groupBox.setGeometry(QtCore.QRect(510, 70, 211, 131))
         self.groupBox.setObjectName("groupBox")
         self.spinBox = QtWidgets.QSpinBox(self.groupBox)
         self.spinBox.setGeometry(QtCore.QRect(40, 50, 42, 22))
@@ -28,12 +27,18 @@ class Ui_Form(object):
         self.spinBox_2 = QtWidgets.QSpinBox(self.groupBox)
         self.spinBox_2.setGeometry(QtCore.QRect(150, 50, 42, 22))
         self.spinBox_2.setObjectName("spinBox_2")
-        self.MplWidget = MplWidget(Form)
+        self.MplWidget = mplwidget(Form)
         self.MplWidget.setGeometry(QtCore.QRect(40, 40, 451, 331))
         self.MplWidget.setObjectName("MplWidget")
         self.pushButton_2 = QtWidgets.QPushButton(Form)
-        self.pushButton_2.setGeometry(QtCore.QRect(540, 250, 93, 28))
+        self.pushButton_2.setGeometry(QtCore.QRect(230, 410, 93, 28))
         self.pushButton_2.setObjectName("pushButton_2")
+        self.label = QtWidgets.QLabel(Form)
+        self.label.setGeometry(QtCore.QRect(560, 260, 47, 13))
+        self.label.setObjectName("label")
+        self.label_2 = QtWidgets.QLabel(Form)
+        self.label_2.setGeometry(QtCore.QRect(560, 360, 47, 13))
+        self.label_2.setObjectName("label_2")
 
         self.retranslateUi(Form)
         QtCore.QMetaObject.connectSlotsByName(Form)
@@ -44,3 +49,6 @@ class Ui_Form(object):
         self.pushButton.setText(_translate("Form", "Start"))
         self.groupBox.setTitle(_translate("Form", "GroupBox"))
         self.pushButton_2.setText(_translate("Form", "File"))
+        self.label.setText(_translate("Form", "TextLabel"))
+        self.label_2.setText(_translate("Form", "TextLabel"))
+from mplwidget import mplwidget

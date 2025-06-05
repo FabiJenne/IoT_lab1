@@ -1,7 +1,7 @@
 import time
 import serial
 import sys
-
+import statistics as stats
 
 from datetime import datetime
 from PyQt5.QtCore import Qt, QTimer, QDateTime, QThread, pyqtSignal
@@ -15,7 +15,7 @@ from matplotlib.backends.backend_qt5agg import NavigationToolbar2QT as Navigatio
 from matplotlib.figure import Figure
 
 ser = serial.Serial(
-    port='COM5',
+    port='COM8',
     baudrate=9600,
     parity=serial.PARITY_ODD,
     stopbits=serial.STOPBITS_TWO,
@@ -63,6 +63,18 @@ class SensorData(QThread):
                 self._z.append(float(values[2]))
                 self.data_updated.emit()
 
+    def calc_mean(self):
+        self.mean_x = sum(self._x) / len(self._x)
+        self.mean_y = sum(self._y) / len(self._y)
+        self.mean_z = sum(self._z) / len(self._z)
+        print(f"Mean: x:{self.mean_x}, y:{self.mean_y}, z:{self.mean_z}")
+    
+    def calc_std(self):
+        self.std_x = stats.stdev(self._x)
+        self.std_y = stats.stdev(self._y)
+        self.std_z = stats.stdev(self._z)
+        print(f"Std via stat: x:{self.std_x:.4f}, y:{self.std_y:.4f}, z:{self.std_z:.4f}")
+
 
 class Lab1(QMainWindow):
     def __init__(self, *args):
@@ -105,6 +117,8 @@ class Lab1(QMainWindow):
             self.last_pause_index = len(self.data.timestamps)
             self.ui.pushButton.setText("Start")
             self.ui.pushButton.setStyleSheet("")
+            self.data.calc_mean()
+            self.data.calc_std()
         else:
             self.plot_data()
             self.status = 1
