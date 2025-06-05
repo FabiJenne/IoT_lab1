@@ -15,7 +15,7 @@ from matplotlib.backends.backend_qt5agg import NavigationToolbar2QT as Navigatio
 from matplotlib.figure import Figure
 
 ser = serial.Serial(
-    port='COM5',
+    port='COM8',
     baudrate=9600,
     parity=serial.PARITY_ODD,
     stopbits=serial.STOPBITS_TWO,
@@ -25,6 +25,7 @@ ser = serial.Serial(
 
 class SensorData(QThread):
     data_updated = pyqtSignal()
+
     def __init__(self):
         super().__init__(parent=None)
         self._x = []
